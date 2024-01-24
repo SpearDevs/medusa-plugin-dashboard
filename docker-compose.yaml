@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: medusa-plugin-summary
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"

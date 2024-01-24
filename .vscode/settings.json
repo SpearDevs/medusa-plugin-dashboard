@@ -1,0 +1,11 @@
+{
+    "editor.tabSize": 2,
+    "workbench.editor.labelFormat": "medium",
+    "typescript.format.semicolons": "remove",
+    "prettier.singleQuote": false,
+    "prettier.trailingComma": "es5",
+    "prettier.arrowParens": "always",
+    "prettier.endOfLine": "auto",
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double"
+}
