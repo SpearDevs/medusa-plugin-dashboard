@@ -1,4 +1,5 @@
-import { MedusaRequest, MedusaResponse, ProductCategoryService, RegionService, StoreService } from "@medusajs/medusa"
+import { MedusaRequest, MedusaResponse, ProductCategoryService, RegionService } from "@medusajs/medusa"
+import { MedusaError } from "@medusajs/utils"
 import StatsService from "../../../../services/stats"
 
 export async function GET(
@@ -12,15 +13,18 @@ export async function GET(
   const productCategoryService: ProductCategoryService = req.scope.resolve("productCategoryService")
 
   const regions = await regionService.list()
+
+  if (regions.length === 0) {
+    throw new MedusaError(MedusaError.Types.NOT_FOUND, "No regions found")
+  }
+
   const categories = await productCategoryService.listAndCount({})
 
   const currentDate = new Date()
   const previousDate = new Date(currentDate)
   previousDate.setDate(currentDate.getDate() - 1)
 
-  if (!region && regions.length > 0) {
-    region = regions[0].id
-  }
+  region = region || regions[0].id
 
   const ordersCurrentDay = await statsService.retrieveOrders(currentDate, region, category)
   const ordersPreviousDay = await statsService.retrieveOrders(previousDate, region, category)
