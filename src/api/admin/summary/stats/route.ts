@@ -25,10 +25,16 @@ export async function GET(
   const ordersCurrentDay = await statsService.retrieveOrders(currentDate, region, category)
   const ordersPreviousDay = await statsService.retrieveOrders(previousDate, region, category)
 
-  const performanceSummary = await statsService.retrieveSummary(ordersCurrentDay, ordersPreviousDay)
+  const summaryCurrentDay = await statsService.retrieveSummary(ordersCurrentDay)
+  const summaryPreviousDay = await statsService.retrieveSummary(ordersPreviousDay)
 
   const revenueCurrentDay = await statsService.retrieveRevenueByHour(ordersCurrentDay, true)
   const revenuePreviousDay = await statsService.retrieveRevenueByHour(ordersPreviousDay)
+
+  const performanceSummary = [
+    { date: currentDate, data: summaryCurrentDay },
+    { date: previousDate, data: summaryPreviousDay }
+  ]
 
   const revenue = [
     { date: currentDate, hourly: revenueCurrentDay },

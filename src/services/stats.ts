@@ -6,12 +6,7 @@ interface PerformanceSummary {
   totalOrders: number
   avgOrderValue: number
   totalRefunds: number
-  prevTotalRevenue?: number
-  prevTotalOrders?: number
-  prevTotalRefunds?: number
-  prevAvgOrderValue?: number
 }
-
 class StatsService extends TransactionBaseService {
   protected readonly orderService_: OrderService
   protected readonly logger_: Logger
@@ -24,30 +19,18 @@ class StatsService extends TransactionBaseService {
 
   /**
    * Retrieves a summary of performance metrics.
-   * @param currOrders Current orders.
-   * @param prevOrders Previous orders (optional).
+   * @param orders Orders to summarize.
    * @returns Performance summary.
    */
-  async retrieveSummary(currOrders: Order[], prevOrders?: Order[]): Promise<PerformanceSummary> {
+  async retrieveSummary(orders: Order[]): Promise<PerformanceSummary> {
     try {
-      const totalRevenue = currOrders.reduce((sum, order) => sum + order.total, 0)
-      const totalOrders = currOrders.length
-      const totalRefunds = currOrders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
+      const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0)
+      const totalOrders = orders.length
+      const totalRefunds = orders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
       const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0
 
       const perfSummary: PerformanceSummary = { totalRevenue, totalOrders, avgOrderValue, totalRefunds }
 
-      if (prevOrders) {
-        const prevTotalRev = prevOrders.reduce((sum, order) => sum + order.total, 0)
-        const prevTotalOrds = prevOrders.length
-        const prevTotalRefunds = prevOrders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
-        const prevAvgOrderValue = prevTotalOrds > 0 ? prevTotalRev / prevTotalOrds : 0
-
-        perfSummary.prevTotalRevenue = prevTotalRev
-        perfSummary.prevTotalOrders = prevTotalOrds
-        perfSummary.prevTotalRefunds = prevTotalRefunds
-        perfSummary.prevAvgOrderValue = prevAvgOrderValue
-      }
       return perfSummary
     } catch (error) {
       this.logger_.error("Error calculating perf summary:", error)
@@ -59,7 +42,7 @@ class StatsService extends TransactionBaseService {
   /**
    * Retrieves revenue distribution by hour.
    * @param orders Orders to analyze.
-   * @param currentDay Indicates whether to consider only the current day.
+   * @param currentDay Indicates whether passed orders are from the current day.
    * @returns Revenue distribution by hour.
    */
   async retrieveRevenueByHour(orders: Order[], currentDay?: boolean): Promise<number[]> {
