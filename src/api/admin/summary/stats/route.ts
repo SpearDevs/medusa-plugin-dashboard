@@ -32,20 +32,20 @@ export async function GET(
   const summaryCurrentDay = await statsService.retrieveSummary(ordersCurrentDay)
   const summaryPreviousDay = await statsService.retrieveSummary(ordersPreviousDay)
 
-  const revenueCurrentDay = await statsService.retrieveRevenueByHour(ordersCurrentDay, true)
-  const revenuePreviousDay = await statsService.retrieveRevenueByHour(ordersPreviousDay)
+  const dataCurrentDay = await statsService.retrieveDataByHour(ordersCurrentDay, true)
+  const dataPreviousDay = await statsService.retrieveDataByHour(ordersPreviousDay)
 
-  const performanceSummary = [
-    { date: currentDate, data: summaryCurrentDay },
-    { date: previousDate, data: summaryPreviousDay }
+  const summary = {
+    primary: { date: currentDate, data: summaryCurrentDay },
+    secondary: { date: previousDate, data: summaryPreviousDay }
+  }
+
+  const data = [
+    { series: "primary", data: dataCurrentDay },
+    { series: "secondary", data: dataPreviousDay }
   ]
 
-  const revenue = [
-    { date: currentDate, hourly: revenueCurrentDay },
-    { date: previousDate, hourly: revenuePreviousDay }
-  ]
+  const options = { regions, categories: categories[0] }
 
-  const options = { regions, categories }
-
-  res.json({ performanceSummary, revenue, options })
+  res.json({ summary, data, options })
 }

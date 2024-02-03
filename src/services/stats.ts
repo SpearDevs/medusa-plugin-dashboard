@@ -1,12 +1,18 @@
 import { Logger, Order, OrderService, TransactionBaseService } from "@medusajs/medusa"
 import { Between, Equal } from "typeorm"
 
-interface PerformanceSummary {
-  totalRevenue: number
-  totalOrders: number
-  avgOrderValue: number
-  totalRefunds: number
+interface Summary {
+  revenue: number
+  orders: number
+  averageOrderValue: number
+  refunds: number
 }
+
+interface DataPoint {
+  x: number,
+  y: any
+}
+
 class StatsService extends TransactionBaseService {
   protected readonly orderService_: OrderService
   protected readonly logger_: Logger
@@ -18,20 +24,20 @@ class StatsService extends TransactionBaseService {
   }
 
   /**
-   * Retrieves a summary of performance metrics.
+   * Retrieves a summary of order metrics.
    * @param orders Orders to summarize.
-   * @returns Performance summary.
+   * @returns Orders summary.
    */
-  async retrieveSummary(orders: Order[]): Promise<PerformanceSummary> {
+  async retrieveSummary(orders: Order[]): Promise<Summary> {
     try {
-      const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0)
-      const totalOrders = orders.length
-      const totalRefunds = orders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
-      const avgOrderValue = totalOrders > 0 ? totalRevenue / totalOrders : 0
+      const revenue = orders.reduce((sum, order) => sum + order.total, 0)
+      const ordersNumber = orders.length
+      const refunds = orders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
+      const averageOrderValue = ordersNumber > 0 ? revenue / ordersNumber : 0
 
-      const perfSummary: PerformanceSummary = { totalRevenue, totalOrders, avgOrderValue, totalRefunds }
+      const summary: Summary = { revenue, orders: ordersNumber, averageOrderValue, refunds }
 
-      return perfSummary
+      return summary
     } catch (error) {
       this.logger_.error("Error calculating perf summary:", error)
       throw error
@@ -40,32 +46,57 @@ class StatsService extends TransactionBaseService {
 
 
   /**
-   * Retrieves revenue distribution by hour.
-   * @param orders Orders to analyze.
-   * @param currentDay Indicates whether passed orders are from the current day.
-   * @returns Revenue distribution by hour.
+   * Retrieves data distribution by hour.
+   * @param orders Orders to analyze, e.g., revenue or orders.
+   * @param currentDay Indicates whether the passed data is from the current day.
+   * @returns Data distribution by hour.
    */
-  async retrieveRevenueByHour(orders: Order[], currentDay?: boolean): Promise<number[]> {
+  async retrieveDataByHour(orders: Order[], currentDay?: boolean): Promise<{
+    revenue: DataPoint[]
+    orders: DataPoint[]
+    averageOrderValue: DataPoint[]
+    refunds: DataPoint[]
+  }> {
     try {
       const hoursInDay = 24
-      let revenueByHour = Array(hoursInDay).fill(0)
+
+      let revenue = Array(hoursInDay).fill(0)
+      let ordersNumber = Array(hoursInDay).fill(0)
+      let refunds = Array(hoursInDay).fill(0)
 
       if (currentDay) {
         const currentDate = new Date()
         const currentHour = currentDate.getHours()
 
-        revenueByHour.fill(null, currentHour + 1)
+        revenue.fill(null, currentHour + 1)
+        ordersNumber.fill(null, currentHour + 1)
+        refunds.fill(null, currentHour + 1)
       }
 
       orders.forEach((order) => {
         const orderCreationHour = order.created_at.getHours()
 
-        revenueByHour[orderCreationHour] += order.total
+        revenue[orderCreationHour] += order.total
+        ordersNumber[orderCreationHour]++
+
+        if (order.refunds) {
+          refunds[orderCreationHour] += order.refunds.length
+        }
       })
 
-      return revenueByHour
+      const averageOrderValue = revenue.map((total, index) => ({
+        x: index,
+        y: ordersNumber[index] === 0 ? 0 : total / ordersNumber[index],
+      }))
+
+      return {
+        revenue: revenue.map((y, x) => ({ x, y })),
+        orders: ordersNumber.map((y, x) => ({ x, y })),
+        averageOrderValue,
+        refunds: refunds.map((y, x) => ({ x, y })),
+      }
     } catch (error) {
-      this.logger_.error("Error retrieving revenue by hour:", error)
+      this.logger_.error("Error retrieving data by hour:", error)
       throw error
     }
   }
@@ -92,11 +123,13 @@ class StatsService extends TransactionBaseService {
       if (region) query.region = Equal(region)
 
       const orders = await this.orderService_.list(query, { relations: ["items.variant.product.categories"] })
-      const filteredOrders = orders.filter((order) =>
-        order.items.some((item) =>
-          item.variant.product.categories.some((category) => category.id === selectedCategory)
+      const filteredOrders = selectedCategory
+        ? orders.filter((order) =>
+          order.items.some((item) =>
+            item.variant.product.categories.some((category) => category.id === selectedCategory)
+          )
         )
-      )
+        : orders
 
       return filteredOrders
     } catch (error) {
