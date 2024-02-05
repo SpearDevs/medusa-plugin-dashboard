@@ -1,15 +1,18 @@
-import { useAdminCustomQuery } from "medusa-react"
-import { Container, Heading, Select } from "@medusajs/ui"
-import Loading from "../atoms/loading"
 import { useEffect, useState } from "react"
+import { useAdminCustomQuery } from "medusa-react"
+import { Container, Heading, Select, Text } from "@medusajs/ui"
 import InfoTile from "../molecules/info-tile"
-import { FormattedDate } from "../atoms/formatted-date"
-import Graph from "../atoms/graph"
+import Graph from "../molecules/graph"
+import Loading from "../atoms/loading"
+import { FormattedDate } from "../atoms/time"
 
 const SummaryStats = () => {
   const [region, setRegion] = useState(undefined)
   const [category, setCategory] = useState(undefined)
-  const [selectedStats, setSelectedStats] = useState("revenue")
+  const [selectedStats, setSelectedStats] = useState({
+    title: "Revenue",
+    key: "revenue",
+  })
 
   const { data: stats, isLoading } = useAdminCustomQuery(
     `/summary/stats/`,
@@ -71,49 +74,62 @@ const SummaryStats = () => {
 
         <div className="flex gap-2">
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 border-2 border-violet-500 rounded-full"></div>
+            <div className="w-2.5 h-2.5 border-2 border-violet-500 rounded-full"></div>
 
-            <FormattedDate value={stats.summary.primary.date} />
+            <Text size="xsmall" className="text-gray-500">
+              <FormattedDate value={stats.summary.primary.timestamp} />
+            </Text>
           </div>
           <div className="flex items-center gap-1">
-            <div className="w-3 h-3 border-2 border-blue-400 rounded-full"></div>
+            <div className="w-2.5 h-2.5 border-2 border-blue-400 rounded-full"></div>
 
-            <FormattedDate value={stats.summary.secondary.date} />
+            <Text size="xsmall" className="text-gray-500">
+              <FormattedDate value={stats.summary.secondary.timestamp} />
+            </Text>
           </div>
         </div>
       </div>
 
-      <Graph selected={selectedStats} data={stats.data} />
+      <Graph
+        selected={selectedStats.key}
+        data={stats.data}
+        tooltipTitle={selectedStats.title}
+      />
 
       <div className="grid grid-cols-2 large:grid-cols-4 gap-4">
         <InfoTile
           title="Today's revenue"
           amount={stats.summary.primary.data.revenue}
-          currency="USD"
+          currency={stats.options.selected.region.currency_code}
           amountToCompare={stats.summary.secondary.data.revenue}
-          onClick={() => setSelectedStats("revenue")}
+          onClick={() => setSelectedStats({ title: "Revenue", key: "revenue" })}
         />
 
         <InfoTile
           title="Today's orders"
           amount={stats.summary.primary.data.orders}
           amountToCompare={stats.summary.secondary.data.orders}
-          onClick={() => setSelectedStats("orders")}
+          onClick={() => setSelectedStats({ title: "Orders", key: "orders" })}
         />
 
         <InfoTile
           title="Avg. order value"
           amount={stats.summary.primary.data.averageOrderValue}
-          currency="USD"
+          currency={stats.options.selected.region.currency_code}
           amountToCompare={stats.summary.secondary.data.averageOrderValue}
-          onClick={() => setSelectedStats("averageOrderValue")}
+          onClick={() =>
+            setSelectedStats({
+              title: "Avg. order value",
+              key: "averageOrderValue",
+            })
+          }
         />
 
         <InfoTile
           title="Today's refunds"
           amount={stats.summary.primary.data.refunds}
           amountToCompare={stats.summary.secondary.data.refunds}
-          onClick={() => setSelectedStats("refunds")}
+          onClick={() => setSelectedStats({ title: "Refunds", key: "refunds" })}
         />
       </div>
     </Container>

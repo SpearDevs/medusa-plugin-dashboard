@@ -6,7 +6,7 @@ export async function GET(
   req: MedusaRequest,
   res: MedusaResponse
 ): Promise<void> {
-  let { region, category } = req.query as { region?: string, category?: string }
+  let { region: regionId, category } = req.query as { region?: string, category?: string }
 
   const statsService: StatsService = req.scope.resolve("statsService")
   const regionService: RegionService = req.scope.resolve("regionService")
@@ -24,10 +24,12 @@ export async function GET(
   const previousDate = new Date(currentDate)
   previousDate.setDate(currentDate.getDate() - 1)
 
-  region = region || regions[0].id
+  regionId = regionId || regions[0].id
 
-  const ordersCurrentDay = await statsService.retrieveOrders(currentDate, region, category)
-  const ordersPreviousDay = await statsService.retrieveOrders(previousDate, region, category)
+  const selectedRegion = regions.find((item) => item.id === regionId)
+
+  const ordersCurrentDay = await statsService.retrieveOrders(currentDate, regionId, category)
+  const ordersPreviousDay = await statsService.retrieveOrders(previousDate, regionId, category)
 
   const summaryCurrentDay = await statsService.retrieveSummary(ordersCurrentDay)
   const summaryPreviousDay = await statsService.retrieveSummary(ordersPreviousDay)
@@ -36,16 +38,16 @@ export async function GET(
   const dataPreviousDay = await statsService.retrieveDataByHour(ordersPreviousDay)
 
   const summary = {
-    primary: { date: currentDate, data: summaryCurrentDay },
-    secondary: { date: previousDate, data: summaryPreviousDay }
+    primary: { timestamp: currentDate, data: summaryCurrentDay },
+    secondary: { timestamp: previousDate, data: summaryPreviousDay }
   }
 
   const data = [
-    { series: "primary", data: dataCurrentDay },
-    { series: "secondary", data: dataPreviousDay }
+    { series: "primary", timestamp: currentDate, currency: selectedRegion.currency_code, data: dataCurrentDay },
+    { series: "secondary", timestamp: previousDate, currency: selectedRegion.currency_code, data: dataPreviousDay }
   ]
 
-  const options = { regions, categories: categories[0] }
+  const options = { selected: { region: selectedRegion, category }, regions, categories: categories[0] }
 
   res.json({ summary, data, options })
 }

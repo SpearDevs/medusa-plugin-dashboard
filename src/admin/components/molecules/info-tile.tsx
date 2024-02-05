@@ -1,6 +1,6 @@
 import { Text, clx } from "@medusajs/ui"
 import { ArrowUpMini, ArrowDownMini } from "@medusajs/icons"
-import { FormattedPrice } from "../atoms/formatted-price"
+import { FormattedPrice } from "../atoms/price"
 
 interface InfoTileProps {
   title: string
@@ -48,7 +48,8 @@ const InfoTile = ({
       </div>
 
       <div className="flex items-center gap-1">
-        <Text className="text-gray-500">{title}</Text>
+        <Text className="txt-small text-gray-500">{title}</Text>
+
         {amountToCompare !== 0 && (
           <Text
             className={clx("flex items-center", {
