@@ -19,12 +19,10 @@ const InfoTile = ({
   onClick,
   selected = false,
 }: InfoTileProps) => {
-  let valueChange: number
+  let valueChange: number = 0
 
   if (amountToCompare !== 0) {
     valueChange = ((amount - amountToCompare) / amountToCompare) * 100
-  } else {
-    valueChange = 0
   }
 
   return (
@@ -38,7 +36,7 @@ const InfoTile = ({
         {currency ? (
           <>
             <Text className="text-xl font-medium">
-              <FormattedPrice amount={amount} currency={currency}/>
+              <FormattedPrice amount={amount} currency={currency} />
             </Text>
             <Text className="font-medium text-gray-500 uppercase">
               {currency}
@@ -51,9 +49,9 @@ const InfoTile = ({
 
       <div className="flex items-center gap-1">
         <Text className="text-gray-500">{title}</Text>
-        {valueChange !== 0 && (
+        {amountToCompare !== 0 && (
           <Text
-            className={clx("flex items-center cursor-pointer", {
+            className={clx("flex items-center", {
               "text-emerald-500": valueChange > 0,
               "text-rose-500": valueChange < 0,
             })}

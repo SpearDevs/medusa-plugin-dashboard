@@ -6,6 +6,7 @@ const formatDate = (dateString: string, locale?: string): string => {
     month: "short",
     year: "numeric",
   }
+
   return new Date(dateString).toLocaleDateString(locale, options)
 }
 

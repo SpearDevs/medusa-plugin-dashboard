@@ -35,15 +35,12 @@ class StatsService extends TransactionBaseService {
       const refunds = orders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
       const averageOrderValue = ordersNumber > 0 ? revenue / ordersNumber : 0
 
-      const summary: Summary = { revenue, orders: ordersNumber, averageOrderValue, refunds }
-
-      return summary
+      return { revenue, orders: ordersNumber, averageOrderValue, refunds }
     } catch (error) {
       this.logger_.error("Error calculating perf summary:", error)
       throw error
     }
   }
-
 
   /**
    * Retrieves data distribution by hour.
@@ -108,7 +105,7 @@ class StatsService extends TransactionBaseService {
    * @param selectedCategory Selected category for filtering (optional).
    * @returns Filtered orders.
    */
-  async retrieveOrders(date: Date = new Date(), region: string, selectedCategory?: string) {
+  async retrieveOrders(date: Date = new Date(), region: string, selectedCategory?: string): Promise<Order[]> {
     try {
       const startOfDay = new Date(date)
       startOfDay.setHours(0, 0, 0, 0)
