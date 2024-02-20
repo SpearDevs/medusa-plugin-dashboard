@@ -6,7 +6,7 @@ import Action from "../molecules/action"
 
 const Activity = () => {
   const { data: activity, isLoading } = useAdminCustomQuery(
-    `/summary/activity/`,
+    `/dashboard/activity/`,
     ["activity"],
     {},
     { keepPreviousData: true }

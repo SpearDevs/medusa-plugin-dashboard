@@ -3,7 +3,7 @@ import { CircleQuarterSolid } from "@medusajs/icons"
 import Stats from "../../components/organisms/stats"
 import Activity from "../../components/organisms/activity"
 
-const SummaryPage = () => {
+const DashboardPage = () => {
   return (
     <>
       <div className="flex flex-col gap-y-base">
@@ -23,4 +23,4 @@ export const config: RouteConfig = {
   },
 }
 
-export default SummaryPage
+export default DashboardPage

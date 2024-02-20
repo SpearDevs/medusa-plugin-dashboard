@@ -15,7 +15,7 @@ const Stats = () => {
   })
 
   const { data: stats, isLoading } = useAdminCustomQuery(
-    `/summary/stats/`,
+    `/dashboard/stats/`,
     ["stats", region, category],
     { region, category },
     { keepPreviousData: true }

@@ -1,4 +1,4 @@
-![Medusa Plugin Summary made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-dashboard/assets/)
+![Medusa Plugin Dashboard made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-dashboard/assets/)
 
 ## Caution is advised when deploying this plugin in production, as it is in the MVP stage. While stable, ongoing improvements may be in progress.
 
