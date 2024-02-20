@@ -6,7 +6,7 @@ import Graph from "../molecules/graph"
 import Loading from "../atoms/loading"
 import { FormattedDate } from "../atoms/time"
 
-const SummaryStats = () => {
+const Stats = () => {
   const [region, setRegion] = useState(undefined)
   const [category, setCategory] = useState(undefined)
   const [selectedStats, setSelectedStats] = useState({
@@ -136,4 +136,4 @@ const SummaryStats = () => {
   )
 }
 
-export default SummaryStats
+export default Stats
