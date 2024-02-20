@@ -2,7 +2,7 @@ import { Text, Avatar } from "@medusajs/ui"
 import { Link } from "react-router-dom"
 import { FormattedSince } from "../atoms/time"
 
-const Action = ({ username, action, details, href, timestamp }) => {
+const UserAction = ({ username, action, details, href, timestamp }) => {
   const firstLetter = username.charAt(0).toUpperCase()
 
   return (
@@ -27,4 +27,4 @@ const Action = ({ username, action, details, href, timestamp }) => {
   )
 }
 
-export default Action
+export default UserAction
