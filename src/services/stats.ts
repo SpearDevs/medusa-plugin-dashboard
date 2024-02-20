@@ -114,7 +114,7 @@ class StatsService extends TransactionBaseService {
       endOfDay.setHours(23, 59, 59, 999)
 
       const query: Record<string, any> = {
-        updated_at: Between(startOfDay.toISOString(), endOfDay.toISOString()),
+        created_at: Between(startOfDay.toISOString(), endOfDay.toISOString()),
       }
 
       if (region) query.region = Equal(region)

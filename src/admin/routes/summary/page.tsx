@@ -1,11 +1,17 @@
 import { RouteConfig } from "@medusajs/admin"
 import { CircleQuarterSolid } from "@medusajs/icons"
-import SummaryStats from "../../components/organisms/summary-stats"
+import Stats from "../../components/organisms/stats"
+import Activity from "../../components/organisms/activity"
 
 const SummaryPage = () => {
   return (
     <>
-      <SummaryStats />
+      <div className="flex flex-col gap-y-base">
+        <Stats />
+        <Activity />
+      </div>
+
+      <div className="h-xlarge w-full"></div>
     </>
   )
 }
