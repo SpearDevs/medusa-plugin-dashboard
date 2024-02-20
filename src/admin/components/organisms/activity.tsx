@@ -34,23 +34,29 @@ const Activity = () => {
         </Link>
       </div>
 
-      <div className="columns-1 large:columns-2">
-        {activity.orders.map((order) => {
-          const customerName = getCustomerName(order.customer)
-          const itemDetails = getItemDetails(order.items)
+      {activity.orders.length === 0 ? (
+        <Heading className="flex justify-center mt-4 text-ui-fg-muted">
+          No activity found
+        </Heading>
+      ) : (
+        <div className="columns-1 large:columns-2">
+          {activity.orders.map((order) => {
+            const customerName = getCustomerName(order.customer)
+            const itemDetails = getItemDetails(order.items)
 
-          return (
-            <Action
-              key={order.id}
-              username={customerName}
-              action="bought"
-              details={itemDetails}
-              href={`/a/orders/${order.id}`}
-              timestamp={order.created_at}
-            />
-          )
-        })}
-      </div>
+            return (
+              <Action
+                key={order.id}
+                username={customerName}
+                action="bought"
+                details={itemDetails}
+                href={`/a/orders/${order.id}`}
+                timestamp={order.created_at}
+              />
+            )
+          })}
+        </div>
+      )}
     </Container>
   )
 }
