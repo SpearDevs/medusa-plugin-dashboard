@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: secret
-      POSTGRES_DB: medusa-plugin-summary
+      POSTGRES_DB: medusa-plugin-dashboard
 
   redis:
     image: redis

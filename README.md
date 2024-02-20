@@ -1,10 +1,10 @@
-![Medusa Plugin Summary made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-summary/assets/)
+![Medusa Plugin Summary made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-dashboard/assets/)
 
 ## Caution is advised when deploying this plugin in production, as it is in the MVP stage. While stable, ongoing improvements may be in progress.
 
-# Plugin Summary
+# Plugin Dashboard
 
-See your sales at a glance.
+See sales, activity and actions at a glance.
 
 [SpearDevs Website](https://speardevs.com)
 
@@ -35,7 +35,7 @@ See your sales at a glance.
 1\. Run the following command in the directory of the Medusa backend:
 
 ```bash
-npm install medusa-plugin-summary
+npm install medusa-plugin-dashboard
 ```
 
 3\. In `medusa-config.js` add the following at the end of the `plugins` array:
@@ -44,7 +44,7 @@ npm install medusa-plugin-summary
 const plugins = [
   // ...
   {
-    resolve: `medusa-plugin-summary`,
+    resolve: `medusa-plugin-dashboard`,
     options: {
       enableUI: true,
     },

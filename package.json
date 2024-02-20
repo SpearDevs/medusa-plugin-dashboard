@@ -1,7 +1,7 @@
 {
-  "name": "medusa-plugin-summary",
+  "name": "medusa-plugin-dashboard",
   "version": "0.0.1",
-  "description": "A starter for Medusa projects.",
+  "description": "See sales, activity and actions at a glance.",
   "author": "SpearDevs <support@speardevs.com>",
   "contributors": [
     {
@@ -13,7 +13,7 @@
   "keywords": [
     "stats",
     "medusa-plugin",
-    "medusa-plugin-summary",
+    "medusa-plugin-dashboard",
     "ecommerce",
     "headless",
     "medusa"
