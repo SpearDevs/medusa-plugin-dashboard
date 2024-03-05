@@ -1,10 +1,10 @@
 import { MedusaRequest, MedusaResponse, SwapFulfillmentStatus, SwapService } from "@medusajs/medusa"
 import { In } from "typeorm"
 
-export const GET = async (
+export async function GET(
   req: MedusaRequest,
   res: MedusaResponse
-) => {
+): Promise<void> {
   const swapService: SwapService = req.scope.resolve("swapService")
 
   const offset = parseInt(req.query.offset as string) || 0

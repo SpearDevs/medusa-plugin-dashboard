@@ -1,10 +1,10 @@
 import { MedusaRequest, MedusaResponse, ReturnService, ReturnStatus } from "@medusajs/medusa"
 import { In, IsNull } from "typeorm"
 
-export const GET = async (
+export async function GET(
   req: MedusaRequest,
   res: MedusaResponse
-) => {
+): Promise<void> {
   const returnService: ReturnService = req.scope.resolve("returnService")
 
   const offset = parseInt(req.query.offset as string) || 0

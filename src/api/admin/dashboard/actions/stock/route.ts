@@ -1,10 +1,10 @@
 import { MedusaRequest, MedusaResponse, Product } from "@medusajs/medusa"
 import { EntityManager } from "typeorm"
 
-export const GET = async (
+export async function GET(
   req: MedusaRequest,
   res: MedusaResponse
-) => {
+): Promise<void> {
   const manager: EntityManager = req.scope.resolve("manager")
 
   const productRepo = manager.getRepository(Product)
