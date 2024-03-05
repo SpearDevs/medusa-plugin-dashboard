@@ -1,14 +1,17 @@
 import { RouteConfig } from "@medusajs/admin"
-import { CircleQuarterSolid } from "@medusajs/icons"
-import Stats from "../../components/organisms/stats"
-import Activity from "../../components/organisms/activity"
+import { ChartBar } from "@medusajs/icons"
+
+import StatisticsOverview from "../../components/templates/statistics-overview"
+import Activity from "../../components/templates/activity"
+import Actions from "../../components/templates/actions"
 
 const DashboardPage = () => {
   return (
     <>
       <div className="flex flex-col gap-y-base">
-        <Stats />
+        <StatisticsOverview />
         <Activity />
+        <Actions />
       </div>
 
       <div className="h-xlarge w-full"></div>
@@ -19,7 +22,7 @@ const DashboardPage = () => {
 export const config: RouteConfig = {
   link: {
     label: "Dashboard",
-    icon: CircleQuarterSolid,
+    icon: ChartBar,
   },
 }
 

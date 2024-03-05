@@ -1,11 +1,10 @@
 import { Spinner } from "@medusajs/icons"
 
 const Loading = () => (
-  <span className="pointer-events-none">
-    <div className="flex items-center justify-center rounded-md">
-      <Spinner className="animate-spin" />
-    </div>
-  </span>
+  <div role="status" className="pointer-events-none my-auto flex items-center justify-center">
+    <Spinner className="animate-spin" />
+    <span className="sr-only">Loading...</span>
+  </div>
 )
 
 export default Loading

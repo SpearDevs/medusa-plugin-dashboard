@@ -1,6 +1,6 @@
 {
   "name": "medusa-plugin-dashboard",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "See sales, activity and actions at a glance.",
   "author": "SpearDevs <support@speardevs.com>",
   "contributors": [
@@ -11,9 +11,11 @@
   ],
   "license": "MIT",
   "keywords": [
-    "stats",
     "medusa-plugin",
     "medusa-plugin-dashboard",
+    "medusa-plugin-analytics",
+    "statistics",
+    "dashboard",
     "ecommerce",
     "headless",
     "medusa"
@@ -48,7 +50,8 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.8",
-    "@visx/visx": "^3.8.0",
+    "@visx/curve": "^3.3.0",
+    "@visx/xychart": "^3.8.0",
     "babel-preset-medusa-package": "^1.1.19",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -71,6 +74,8 @@
   "peerDependencies": {
     "@medusajs/medusa": "1.20.0",
     "@medusajs/ui": "^2.4.1",
+    "@visx/curve": "^3.3.0",
+    "@visx/xychart": "^3.8.0",
     "react": "^18.2.0",
     "react-router-dom": "^6.13.0"
   },

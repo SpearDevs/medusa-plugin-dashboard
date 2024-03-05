@@ -1,3 +1,5 @@
+import { Text, clx } from "@medusajs/ui"
+import { ArrowUpMini, ArrowDownMini } from "@medusajs/icons"
 import {
   XYChart,
   AnimatedLineSeries,
@@ -6,12 +8,17 @@ import {
   Tooltip,
   buildChartTheme,
 } from "@visx/xychart"
-
 import { curveMonotoneX } from "@visx/curve"
-import { Text, clx } from "@medusajs/ui"
-import { ArrowUpMini, ArrowDownMini } from "@medusajs/icons"
+
 import { FormattedPrice } from "../atoms/price"
 import { FormattedDate, FormattedHour } from "../atoms/time"
+
+interface GraphProps {
+  data: any
+  selected: string
+  currency: string
+  tooltipTitle: string
+}
 
 const customTheme = buildChartTheme({
   backgroundColor: undefined,
@@ -32,7 +39,7 @@ const accessors = {
   yAccessor: (d) => d.y,
 }
 
-const CustomTooltip = ({ tooltipData, tooltipTitle, data, colorScale }) => {
+const CustomTooltip = ({ tooltipData, title, data, colorScale, currency }) => {
   const { nearestDatum, datumByKey } = tooltipData
   const { primary, secondary } = datumByKey
 
@@ -43,7 +50,7 @@ const CustomTooltip = ({ tooltipData, tooltipTitle, data, colorScale }) => {
 
   let valueChange: number = 0
 
-  if (amountToCompare !== 0) {
+  if (amount && amountToCompare) {
     valueChange = ((amount - amountToCompare) / amountToCompare) * 100
   }
 
@@ -57,10 +64,10 @@ const CustomTooltip = ({ tooltipData, tooltipTitle, data, colorScale }) => {
     >
       <div className="flex justify-between gap-3">
         <Text size="xsmall">
-          {tooltipTitle} (<FormattedHour value={hour} />)
+          {title} (<FormattedHour value={hour} />-<FormattedHour value={hour + 1} />)
         </Text>
 
-        {amountToCompare !== 0 && (
+        {valueChange !== 0 && (
           <Text
             size="xsmall"
             className={clx("flex items-center", {
@@ -78,32 +85,26 @@ const CustomTooltip = ({ tooltipData, tooltipTitle, data, colorScale }) => {
         .reverse()
         .map((lineDataArray) => {
           const [key, value]: [key: string, value: any] = lineDataArray
-
-          const { timestamp, currency } = data.find(
-            (item) => item.series === key
-          )
-
           const amount = accessors.yAccessor(value.datum)
 
           if (amount === null) return
 
+          const { timestamp } = data.find((item) => item.series === key)
+
           return (
             <div key={key} className="flex justify-between gap-3">
-              <div
-                className="flex items-center gap-1"
-                style={{ color: colorScale(key) }}
-              >
+              <div className="flex items-center gap-1" style={{ color: colorScale(key) }}>
                 <div
-                  className="w-2.5 h-2.5 border-2 rounded-full"
+                  className="aspect-square h-2.5 w-2.5 rounded-full border-2"
                   style={{ borderColor: colorScale(key) }}
                 ></div>
 
                 <Text size="xsmall">
-                  <FormattedPrice
-                    amount={amount}
-                    currency={currency}
-                    style="currency"
-                  />
+                  {currency ? (
+                    <FormattedPrice amount={amount} currency={currency} style="currency" />
+                  ) : (
+                    amount
+                  )}
                 </Text>
               </div>
 
@@ -117,21 +118,17 @@ const CustomTooltip = ({ tooltipData, tooltipTitle, data, colorScale }) => {
   )
 }
 
-const Graph = ({ selected, data, tooltipTitle }) => {
-  if (!data) return null
-
+const Graph = ({ data, selected, currency, tooltipTitle }: GraphProps) => {
   return (
-    <XYChart
-      theme={customTheme}
-      height={250}
-      xScale={{ type: "band" }}
-      yScale={{ type: "linear" }}
-    >
-      <AnimatedGrid
-        rows={false}
-        className="opacity-25"
-        lineStyle={dottedLineStyle}
+    <XYChart theme={customTheme} height={250} xScale={{ type: "band" }} yScale={{ type: "linear" }}>
+      <AnimatedGrid rows={false} className="opacity-25" lineStyle={dottedLineStyle} numTicks={24} />
+
+      <AnimatedAxis
+        orientation="bottom"
         numTicks={24}
+        hideTicks
+        hideAxisLine
+        tickFormat={(value, index) => (index === 0 || index === 23 ? `${value}:00` : "")}
       />
 
       {data.toReversed().map((seriesData) => (
@@ -144,16 +141,6 @@ const Graph = ({ selected, data, tooltipTitle }) => {
         />
       ))}
 
-      <AnimatedAxis
-        orientation="bottom"
-        numTicks={24}
-        hideTicks
-        hideAxisLine
-        tickFormat={(value, index) =>
-          index === 0 || index === 23 ? `${value}:00` : ""
-        }
-      />
-
       <Tooltip
         snapTooltipToDatumX
         showVerticalCrosshair
@@ -164,9 +151,10 @@ const Graph = ({ selected, data, tooltipTitle }) => {
         renderTooltip={({ tooltipData, colorScale }) => (
           <CustomTooltip
             tooltipData={tooltipData}
-            tooltipTitle={tooltipTitle}
-            data={data}
             colorScale={colorScale}
+            data={data}
+            title={tooltipTitle}
+            currency={currency}
           />
         )}
       />
