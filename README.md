@@ -1,32 +1,20 @@
-![Medusa Plugin Dashboard made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-dashboard/assets/)
+![Medusa Plugin Dashboard made by SpearDevs](https://github.com/SpearDevs/medusa-plugin-dashboard/assets/9082934/2169c0c7-9f5f-4a4a-abe9-cbb7dcd1f3e6)
 
-## Caution is advised when deploying this plugin in production, as it is in the MVP stage. While stable, ongoing improvements may be in progress.
+# Medusa Plugin Dashboard by [SpearDevs](https://speardevs.com)
 
-# Plugin Dashboard
-
-See sales, activity and actions at a glance.
-
-[SpearDevs Website](https://speardevs.com)
+The Medusa Plugin Dashboard streamlines your e-commerce tracking and management through a single, easy-to-use interface.
 
 ## Features
 
--
--
--
-
----
-
-## Planned Features
-
--
--
--
+- Sales Overview: Keep track of your daily revenue, orders, and average order value with our sales graph.
+- Activity Feed: Stay updated with the latest customer purchases on your store.
+- Actionable Insights: Quickly identify orders to fulfill, shipments to send out, stock levels, returns, and swaps to manage.
 
 ---
 
 ## Prerequisites
 
-- [Medusa backend](https://docs.medusajs.com/development/backend/install)
+ Before installing the Medusa Plugin Dashboard, ensure that you have the Medusa backend set up. You can find the installation guide for the Medusa backend [here](https://docs.medusajs.com/development/backend/install).
 
 ---
 
@@ -38,7 +26,7 @@ See sales, activity and actions at a glance.
 npm install medusa-plugin-dashboard
 ```
 
-3\. In `medusa-config.js` add the following at the end of the `plugins` array:
+2\. In `medusa-config.js` add the following at the end of the `plugins` array:
 
 ```js
 const plugins = [
