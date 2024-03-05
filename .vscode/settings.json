@@ -7,5 +7,6 @@
     "prettier.arrowParens": "always",
     "prettier.endOfLine": "auto",
     "javascript.preferences.quoteStyle": "double",
-    "typescript.preferences.quoteStyle": "double"
+    "typescript.preferences.quoteStyle": "double",
+    "prettier.printWidth": 100
 }
