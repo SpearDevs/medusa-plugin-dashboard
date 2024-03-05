@@ -1,6 +1,6 @@
 import { MedusaRequest, MedusaResponse, ProductCategoryService, RegionService } from "@medusajs/medusa"
 import { MedusaError } from "@medusajs/utils"
-import StatsService from "../../../../services/stats"
+import StatisticsService from "../../../../services/statistics"
 
 export async function GET(
   req: MedusaRequest,
@@ -8,7 +8,7 @@ export async function GET(
 ): Promise<void> {
   let { region: regionId, category } = req.query as { region?: string, category?: string }
 
-  const statsService: StatsService = req.scope.resolve("statsService")
+  const statsService: StatisticsService = req.scope.resolve("statisticsService")
   const regionService: RegionService = req.scope.resolve("regionService")
   const productCategoryService: ProductCategoryService = req.scope.resolve("productCategoryService")
 
@@ -18,7 +18,7 @@ export async function GET(
     throw new MedusaError(MedusaError.Types.NOT_FOUND, "No regions found")
   }
 
-  const categories = await productCategoryService.listAndCount({})
+  const [categories] = await productCategoryService.listAndCount({})
 
   const currentDate = new Date()
   const previousDate = new Date(currentDate)
@@ -47,7 +47,7 @@ export async function GET(
     { series: "secondary", timestamp: previousDate, currency: selectedRegion.currency_code, data: dataPreviousDay }
   ]
 
-  const options = { selected: { region: selectedRegion, category }, regions, categories: categories[0] }
+  const options = { selected: { region: selectedRegion, category }, regions, categories }
 
   res.json({ summary, data, options })
 }
