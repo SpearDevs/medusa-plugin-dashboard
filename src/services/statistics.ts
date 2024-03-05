@@ -13,7 +13,7 @@ interface DataPoint {
   y: any
 }
 
-class StatsService extends TransactionBaseService {
+class StatisticsService extends TransactionBaseService {
   protected readonly orderService_: OrderService
   protected readonly logger_: Logger
 
@@ -136,4 +136,4 @@ class StatsService extends TransactionBaseService {
   }
 }
 
-export default StatsService
+export default StatisticsService
