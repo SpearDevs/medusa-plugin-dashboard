@@ -3,12 +3,20 @@ import { Link } from "react-router-dom"
 
 import { FormattedSince } from "../atoms/time"
 
-const UserAction = ({ username, action, details, href, timestamp }) => {
+interface UserActionProps {
+  username: string
+  action: string
+  details: string
+  link: string
+  timestamp: string | Date
+}
+
+const UserAction = ({ username, action, details, link, timestamp }: UserActionProps) => {
   const firstLetter = username.charAt(0).toUpperCase()
 
   return (
     <Link
-      to={href}
+      to={link}
       className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-gray-500 transition-all hover:bg-gray-50"
     >
       <Avatar fallback={firstLetter} size="xsmall"></Avatar>

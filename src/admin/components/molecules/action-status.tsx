@@ -1,7 +1,23 @@
 import { Text, clx } from "@medusajs/ui"
 import { Check } from "@medusajs/icons"
 
-const ActionStatus = ({ action, description, complete, onClick, Icon, className = "" }) => {
+interface ActionStatusProps {
+  action: string
+  description: string
+  complete: boolean
+  onClick: () => void
+  Icon: any
+  className?: string
+}
+
+const ActionStatus = ({
+  action,
+  description,
+  complete,
+  onClick,
+  Icon,
+  className,
+}: ActionStatusProps) => {
   return (
     <div
       onClick={() => !complete && onClick()}

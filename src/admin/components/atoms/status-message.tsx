@@ -1,6 +1,6 @@
 import { Text } from "@medusajs/ui"
 
-const StatusMessage = ({ message }) => {
+const StatusMessage = ({ message }: { message: string }) => {
   return (
     <Text
       size="xlarge"

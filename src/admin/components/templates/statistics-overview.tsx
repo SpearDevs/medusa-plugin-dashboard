@@ -24,9 +24,7 @@ const Statistics = () => {
   )
 
   useEffect(() => {
-    if (statistics && !region) {
-      setRegion(statistics.options.regions[0].id)
-    }
+    if (statistics && !region) setRegion(statistics.options.regions[0].id)
   }, [statistics])
 
   return (

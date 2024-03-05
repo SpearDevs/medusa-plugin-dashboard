@@ -13,6 +13,13 @@ import { curveMonotoneX } from "@visx/curve"
 import { FormattedPrice } from "../atoms/price"
 import { FormattedDate, FormattedHour } from "../atoms/time"
 
+interface GraphProps {
+  data: any
+  selected: string
+  currency: string
+  tooltipTitle: string
+}
+
 const customTheme = buildChartTheme({
   backgroundColor: undefined,
   colors: ["#60a5fa", "#8b5cf6"],
@@ -111,7 +118,7 @@ const CustomTooltip = ({ tooltipData, title, data, colorScale, currency }) => {
   )
 }
 
-const Graph = ({ data, selected, currency, tooltipTitle }) => {
+const Graph = ({ data, selected, currency, tooltipTitle }: GraphProps) => {
   return (
     <XYChart theme={customTheme} height={250} xScale={{ type: "band" }} yScale={{ type: "linear" }}>
       <AnimatedGrid rows={false} className="opacity-25" lineStyle={dottedLineStyle} numTicks={24} />

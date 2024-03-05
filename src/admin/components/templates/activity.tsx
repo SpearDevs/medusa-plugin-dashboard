@@ -30,7 +30,7 @@ const Activity = () => {
           username={customerName}
           action="bought"
           details={itemDetails}
-          href={`/a/orders/${order.id}`}
+          link={`/a/orders/${order.id}`}
           timestamp={order.created_at}
         />
       )

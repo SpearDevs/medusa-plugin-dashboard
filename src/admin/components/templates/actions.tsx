@@ -21,7 +21,7 @@ const Actions = () => {
   const [open, setOpen] = useState(false)
   const [title, setTitle] = useState("")
 
-  const showModal = (actionType, title) => {
+  const showModal = (actionType: string, title: string) => {
     setSelectedAction(actionType)
     setTitle(title)
     setOpen(true)
