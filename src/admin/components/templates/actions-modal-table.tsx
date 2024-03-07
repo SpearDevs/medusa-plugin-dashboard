@@ -5,7 +5,7 @@ import ResourceView from "../../utils/resource-view"
 import StatusMessage from "../atoms/status-message"
 import SimpleTable, { Column } from "../molecules/simple-table"
 
-const DEFAULT_PAGE_SIZE = 10
+const DEFAULT_PAGE_SIZE = 15
 
 const getColumns = (action: string): Array<Column> => {
   switch (action) {
