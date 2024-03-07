@@ -120,45 +120,57 @@ const CustomTooltip = ({ tooltipData, title, data, colorScale, currency }) => {
 
 const Graph = ({ data, selected, currency, tooltipTitle }: GraphProps) => {
   return (
-    <XYChart theme={customTheme} height={250} xScale={{ type: "band" }} yScale={{ type: "linear" }}>
-      <AnimatedGrid rows={false} className="opacity-25" lineStyle={dottedLineStyle} numTicks={24} />
-
-      <AnimatedAxis
-        orientation="bottom"
-        numTicks={24}
-        hideTicks
-        hideAxisLine
-        tickFormat={(value, index) => (index === 0 || index === 23 ? `${value}:00` : "")}
-      />
-
-      {data.toReversed().map((seriesData) => (
-        <AnimatedLineSeries
-          key={seriesData.series}
-          dataKey={seriesData.series}
-          data={seriesData.data[selected]}
-          {...accessors}
-          curve={curveMonotoneX}
+    <div className="h-64">
+      <XYChart
+        theme={customTheme}
+        height={256}
+        xScale={{ type: "band" }}
+        yScale={{ type: "linear" }}
+      >
+        <AnimatedGrid
+          rows={false}
+          className="opacity-25"
+          lineStyle={dottedLineStyle}
+          numTicks={24}
         />
-      ))}
 
-      <Tooltip
-        snapTooltipToDatumX
-        showVerticalCrosshair
-        verticalCrosshairStyle={dottedLineStyle}
-        showSeriesGlyphs
-        unstyled
-        className="absolute"
-        renderTooltip={({ tooltipData, colorScale }) => (
-          <CustomTooltip
-            tooltipData={tooltipData}
-            colorScale={colorScale}
-            data={data}
-            title={tooltipTitle}
-            currency={currency}
+        <AnimatedAxis
+          orientation="bottom"
+          numTicks={24}
+          hideTicks
+          hideAxisLine
+          tickFormat={(value, index) => (index === 0 || index === 23 ? `${value}:00` : "")}
+        />
+
+        {data.toReversed().map((seriesData) => (
+          <AnimatedLineSeries
+            key={seriesData.series}
+            dataKey={seriesData.series}
+            data={seriesData.data[selected]}
+            {...accessors}
+            curve={curveMonotoneX}
           />
-        )}
-      />
-    </XYChart>
+        ))}
+
+        <Tooltip
+          snapTooltipToDatumX
+          showVerticalCrosshair
+          verticalCrosshairStyle={dottedLineStyle}
+          showSeriesGlyphs
+          unstyled
+          className="absolute"
+          renderTooltip={({ tooltipData, colorScale }) => (
+            <CustomTooltip
+              tooltipData={tooltipData}
+              colorScale={colorScale}
+              data={data}
+              title={tooltipTitle}
+              currency={currency}
+            />
+          )}
+        />
+      </XYChart>
+    </div>
   )
 }
 
