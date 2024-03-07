@@ -60,8 +60,10 @@ const SimpleTable = ({
 
   const navigate = useNavigate()
 
-  const canNextPage = useMemo(() => pageIndex < count / pageSize - 1, [pageIndex, count])
-  const canPreviousPage = useMemo(() => pageIndex - 1 >= 0, [pageIndex])
+  const pageCount = useMemo(() => Math.ceil(count / pageSize), [count, pageSize])
+
+  const canNextPage = useMemo(() => pageIndex < pageCount - 1, [pageIndex, pageCount])
+  const canPreviousPage = useMemo(() => pageIndex > 0, [pageIndex])
 
   const nextPage = useCallback(() => setPageIndex((prev) => prev + 1), [])
   const previousPage = useCallback(() => setPageIndex((prev) => prev - 1), [])
@@ -108,7 +110,7 @@ const SimpleTable = ({
         count={count}
         pageSize={pageSize}
         pageIndex={pageIndex}
-        pageCount={count / pageSize}
+        pageCount={pageCount}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
         previousPage={previousPage}
