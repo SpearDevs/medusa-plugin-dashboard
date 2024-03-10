@@ -47,7 +47,7 @@ const Actions = () => {
     {
       id: "stock",
       title: "Out of stock products",
-      action: (actions) => `${pluralize(actions.outOfStockProducts, "product")} are out of stock`,
+      action: (actions) => `${pluralize(actions.outOfStockProducts, "product")} out of stock`,
       description: "Manage and process products that are out of stock",
       Icon: Tag,
       complete: (actions) => !actions.outOfStockProducts,

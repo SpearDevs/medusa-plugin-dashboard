@@ -1,6 +1,6 @@
 {
   "name": "medusa-plugin-dashboard",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "See sales, activity and actions at a glance.",
   "author": "SpearDevs <support@speardevs.com>",
   "contributors": [
