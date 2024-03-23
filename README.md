@@ -14,7 +14,9 @@ The Medusa Plugin Dashboard streamlines your e-commerce tracking and management 
 
 ## Prerequisites
 
- Before installing the Medusa Plugin Dashboard, ensure that you have the Medusa backend set up. You can find the installation guide for the Medusa backend [here](https://docs.medusajs.com/development/backend/install).
+ Ensure that you have the Medusa backend set up. You can find the installation guide for the Medusa backend [here](https://docs.medusajs.com/development/backend/install).
+
+ Enable [categories](https://docs.medusajs.com/modules/products/categories)
 
 ---
 

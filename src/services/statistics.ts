@@ -1,5 +1,5 @@
-import { Logger, Order, OrderService, TransactionBaseService } from "@medusajs/medusa"
-import { Between, Equal } from "typeorm"
+import { FulfillmentStatus, Logger, Order, OrderService, TransactionBaseService } from "@medusajs/medusa"
+import { Between, Equal, Not } from "typeorm"
 
 interface Summary {
   revenue: number
@@ -30,7 +30,11 @@ class StatisticsService extends TransactionBaseService {
    */
   async retrieveSummary(orders: Order[]): Promise<Summary> {
     try {
-      const revenue = orders.reduce((sum, order) => sum + order.total, 0)
+      const revenue = orders.reduce((sum, { total, refunds }) => {
+        const totalRefunds = refunds.reduce((refundSum, { amount }) => refundSum + amount, 0)
+
+        return sum + total - totalRefunds
+      }, 0)
       const ordersNumber = orders.length
       const refunds = orders.reduce((sum, order) => sum + (order.refunds ? order.refunds.length : 0), 0)
       const averageOrderValue = ordersNumber > 0 ? revenue / ordersNumber : 0
@@ -78,6 +82,10 @@ class StatisticsService extends TransactionBaseService {
 
         if (order.refunds) {
           refunds[orderCreationHour] += order.refunds.length
+
+          order.refunds.forEach(refund => {
+            revenue[orderCreationHour] -= refund.amount
+          })
         }
       })
 
@@ -115,6 +123,7 @@ class StatisticsService extends TransactionBaseService {
 
       const query: Record<string, any> = {
         created_at: Between(startOfDay.toISOString(), endOfDay.toISOString()),
+        fulfillment_status: Not(FulfillmentStatus.CANCELED),
       }
 
       if (region) query.region = Equal(region)
